@@ -109,7 +109,7 @@ def display_policy_details(visit_id):
     if policy is None:
         return render_template(
             ERROR,
-            message=f"No information found for policy {df["ContractorClientPolicyNumber"].iloc[0]} {df["ContractorClientEnName"].iloc[0]}.",
+            message=f"No information found for policy {df['ContractorClientPolicyNumber'].iloc[0]} {df['ContractorClientEnName'].iloc[0]}.",
         )
     if detail is None:
         return render_template(

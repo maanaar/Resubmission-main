@@ -3,11 +3,22 @@ from typing import Annotated, TypedDict
 
 from dotenv import load_dotenv
 from langchain_core.messages import AnyMessage, HumanMessage, SystemMessage
-from langchain.messages import RemoveMessage
+from langchain_core.messages import RemoveMessage
 from langchain_fireworks import ChatFireworks
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, StateGraph
-from langgraph.types import Overwrite
+
+
+class Overwrite(list):
+    """Drop-in replacement for langgraph.types.Overwrite (requires Python >=3.10).
+    Signals the custom reducer to replace messages rather than append."""
+    pass
+
+
+def _messages_reducer(left, right):
+    if isinstance(right, Overwrite):
+        return list(right)
+    return left + right
 
 from src.resubmission.prompt import chatbot_prompt, justification_prompt
 
@@ -15,7 +26,7 @@ load_dotenv()
 
 
 class AgentState(TypedDict):
-    messages: Annotated[list[AnyMessage], operator.add]
+    messages: Annotated[list[AnyMessage], _messages_reducer]
 
 
 class InsuranceAgent:
