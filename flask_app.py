@@ -29,6 +29,13 @@ from resubmission.utils_patched import (
 
 load_dotenv()
 
+from mongoengine import connect as mongo_connect
+mongo_connect(
+    db=os.getenv("MONGO_DB", "resubmission_db"),
+    host=os.getenv("MONGO_HOST", "localhost"),
+    port=int(os.getenv("MONGO_PORT", "27017")),
+)
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
