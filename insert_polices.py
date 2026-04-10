@@ -6,10 +6,11 @@ from mongoengine import connect
 from datetime import datetime
 
 # Connect same way as models.py
+import os
 connect(
-    db="resubmission_db",
-    host="localhost",
-    port=27017,
+    db=os.getenv("MONGO_DB", "resubmission_db"),
+    host=os.getenv("MONGO_HOST", "localhost"),
+    port=int(os.getenv("MONGO_PORT", "27017")),
 )
 
 # Import models AFTER connect
